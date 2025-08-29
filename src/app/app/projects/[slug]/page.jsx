@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 export const dynamic = "force-dynamic";
 
 async function getProjectBySlug(slug) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
 
   const res = await fetch(`http://localhost:5000/api/v1/project/slug/${slug}`, {
@@ -25,7 +25,8 @@ async function getProjectBySlug(slug) {
 
 export default async function ProjectPage({ params }) {
   try {
-    const project = await getProjectBySlug(params.slug);
+    const { slug } = await params;
+    const project = await getProjectBySlug(slug);
 
     return (
       <div className="p-6">

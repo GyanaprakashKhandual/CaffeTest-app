@@ -1,7 +1,6 @@
 
 'use client';
 import React from 'react';
-import '../../styles/components.css'
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'

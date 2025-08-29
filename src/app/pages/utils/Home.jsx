@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { FaCoffee, FaCode, FaRocket, FaBug, FaChartLine, FaGithub, FaTwitter, FaLinkedin, FaCheckCircle, FaArrowRight, FaPlay } from 'react-icons/fa'
-
+import { useRouter } from 'next/navigation'
 export default function CaffetestLanding() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.9])
   const headerBlur = useTransform(scrollY, [0, 100], [0, 10])
 
+  const router = useRouter();
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
@@ -97,6 +98,7 @@ export default function CaffetestLanding() {
               </nav>
               
               <motion.button
+              onClick={() => router.push('/auth')}
                 className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-full hover:shadow-lg transition-all duration-300"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
