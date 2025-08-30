@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { FaCoffee, FaCode, FaRocket, FaBug, FaChartLine, FaGithub, FaTwitter, FaLinkedin, FaCheckCircle, FaArrowRight, FaPlay } from 'react-icons/fa'
-
+import { useRouter } from 'next/navigation'
 export default function CaffetestLanding() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.95])
 
+  const router = useRouter();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
@@ -70,9 +71,9 @@ export default function CaffetestLanding() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-10 h-10 bg-sky-600 rounded-lg flex items-center justify-center">
-                <FaCoffee className="w-5 h-5 text-white" />
-              </div>
+              
+                <FaCoffee className="w-8 h-8 text-blue-900" />
+              
               <span className="text-xl font-semibold text-gray-900">
                 Caffetest
               </span>
@@ -80,7 +81,7 @@ export default function CaffetestLanding() {
 
             <div className="hidden md:flex items-center space-x-8">
               <nav className="flex items-center space-x-6">
-                {['Features', 'Benefits', 'Pricing', 'Contact'].map((item, index) => (
+                {['Documentation', 'Pricing', 'Contact'].map((item, index) => (
                   <motion.a
                     key={item}
                     href={`#${item.toLowerCase()}`}
@@ -95,6 +96,7 @@ export default function CaffetestLanding() {
               </nav>
               
               <motion.button
+              onClick={() => router.push('/auth')}
                 className="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -431,9 +433,9 @@ export default function CaffetestLanding() {
               viewport={{ once: true }}
             >
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <FaCoffee className="w-4 h-4 text-white" />
-                </div>
+                
+                  <FaCoffee className="w-8 h-8 text-blue-900" />
+                
                 <span className="text-lg font-semibold text-white">Caffetest</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed mb-4">
