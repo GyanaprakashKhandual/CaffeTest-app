@@ -1,17 +1,18 @@
-import React from 'react'
-import ProjectSidebar from '../components/modules/Sidebar';
+import ProjectSidebar from "../components/modules/Sidebar";
+import ProjectDetails from "../components/pages/Configure";
 
 export const metadata = {
   title: "Dashboard - Integrate with code cloud",
   description: "Dashboard page for Calf",
 };
 
-function page() {
+function Page() {
   return (
-    <div>
-      <ProjectSidebar/>
+    <div className="flex h-screen">
+      <ProjectSidebar />
+      <ProjectDetails />
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;

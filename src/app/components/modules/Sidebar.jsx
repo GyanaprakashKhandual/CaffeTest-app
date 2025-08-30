@@ -18,48 +18,43 @@ import { ThreeDotsDropdown } from "../assets/Dropdown";
 import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder, CalfFolderOpen } from "../utils/Icon";
+import { useProject } from "@/app/script/Projectcontext";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+  // const [selectedProject, setSelectedProject] = useState(null); // Use context instead
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // "edit" or "create"
-  const [token, setToken] = useState(null);
+  // Remove token state, always get from localStorage when needed
   const [hoveredProject, setHoveredProject] = useState(null);
   const [userData, setUserData] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
+
+  const { selectedProject, setSelectedProject } = useProject();
+  
+
   const router = useRouter();
 
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    setToken(savedToken);
-  }, []);
+
 
   const fetchUserData = async () => {
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const res = await axios.get("http://localhost:5000/api/v1/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       console.log("Full API Response:", res.data);
-
-      // Sometimes API sends { user: {...} } or just {...}
       const user = res.data?.data || res.data?.user || res.data;
-
       setUserData(user);
-
       if (user) {
         console.log("User Email:", user.email || "Not provided");
         console.log("User Name:", user.name || "Not provided");
       } else {
         console.warn("No user data found in response");
       }
-
     } catch (err) {
       console.error("Error fetching user data", err);
     }
@@ -67,18 +62,16 @@ const Sidebar = () => {
 
 
   useEffect(() => {
-    if (token) {
-      fetchUserData();
-    }
-  }, [token]);
+    fetchUserData();
+  }, []);
 
   const fetchProjects = async () => {
+    const token = localStorage.getItem("token");
     if (!token) return;
     try {
       const res = await axios.get("http://localhost:5000/api/v1/project/", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       console.log("API response:", res.data);
       setProjects(res.data.data || []);
     } catch (err) {
@@ -89,9 +82,10 @@ const Sidebar = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [token]);
+  }, []);
 
   const deleteProject = async (projectId) => {
+    const token = localStorage.getItem("token");
     try {
       await axios.delete(`http://localhost:5000/api/v1/project/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -103,6 +97,7 @@ const Sidebar = () => {
   };
 
   const handleLogout = async () => {
+    const token = localStorage.getItem("token");
     try {
       await axios.post("http://localhost:5000/api/v1/auth/logout", {}, {
         headers: { Authorization: `Bearer ${token}` },
@@ -333,18 +328,18 @@ const Sidebar = () => {
                               <circle cx="12" cy="12" r="3" />
                               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .7.4 1.31 1 1.51.62.22 1.31.09 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.42.51-.55 1.2-.33 1.82.2.6.81 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.7 0-1.31.4-1.51 1z" />
                             </svg>,
-                            onClick: () => router.push(`/app/projects/${project.slug}`)
+                            onClick: () => setSelectedProject(project),
                           },
-{
-  label: "Workspace",
-  icon: (
-    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M9 9h6v6H9z" />
-    </svg>
-  ),
-  onClick: () => router.push(`/app/projects/${project.slug}`),
-},
+                          {
+                            label: "Workspace",
+                            icon: (
+                              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <path d="M9 9h6v6H9z" />
+                              </svg>
+                            ),
+                            onClick: () => router.push(`/app/projects/${project.slug}`),
+                          },
                           {
                             label: "Delete",
                             icon: <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>,
@@ -441,7 +436,7 @@ const Sidebar = () => {
           <ProjectModal
             type={modalType}
             project={selectedProject}
-            token={token}
+            token={localStorage.getItem("token")}
             onClose={() => setModalOpen(false)}
             onSuccess={handleModalSuccess}
           />
