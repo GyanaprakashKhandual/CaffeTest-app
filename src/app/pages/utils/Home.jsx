@@ -56,10 +56,10 @@ export default function CaffetestLanding() {
   ]
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-sky-50">
       {/* Header */}
       <motion.header 
-        className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100"
+        className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-sky-100"
         style={{ opacity: headerOpacity }}
       >
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -70,7 +70,7 @@ export default function CaffetestLanding() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-sky-600 rounded-lg flex items-center justify-center">
                 <FaCoffee className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-semibold text-gray-900">
@@ -84,7 +84,7 @@ export default function CaffetestLanding() {
                   <motion.a
                     key={item}
                     href={`#${item.toLowerCase()}`}
-                    className="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium text-sm"
+                    className="text-gray-600 hover:text-sky-600 transition-colors duration-200 font-medium text-sm"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
