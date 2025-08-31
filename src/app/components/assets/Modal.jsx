@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { X, Plus, Edit3, Save, Loader2 } from "lucide-react";
 import Alert from "../utils/Alert";
+import axios from "axios";
+import { useProject } from "@/app/script/Projectcontext";
 
 
 const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
@@ -247,5 +249,7 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
     </div>
   );
 };
+
+
 
 export default ProjectModal;

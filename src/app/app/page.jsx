@@ -1,5 +1,5 @@
 import ProjectSidebar from "../components/modules/Sidebar";
-import ProjectDetails from "../components/pages/Configure";
+import TestConfigurationDashboard from "../components/pages/Configure";
 
 export const metadata = {
   title: "Dashboard - Integrate with code cloud",
@@ -10,7 +10,9 @@ function Page() {
   return (
     <div className="flex h-screen">
       <ProjectSidebar />
-      <ProjectDetails />
+      <div className="w-7xl">
+        <TestConfigurationDashboard/>
+      </div>
     </div>
   );
 }
