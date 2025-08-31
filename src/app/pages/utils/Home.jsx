@@ -16,6 +16,10 @@ export default function CaffetestLanding() {
     transition: { duration: 0.5, ease: "easeOut" }
   }
 
+  const openPage = (item) => {
+    router.push(`/${item}`);
+  }
+
   const staggerContainer = {
     animate: {
       transition: {
@@ -84,7 +88,7 @@ export default function CaffetestLanding() {
                 {['Documentation', 'Pricing', 'Contact'].map((item, index) => (
                   <motion.a
                     key={item}
-                    href={`#${item.toLowerCase()}`}
+                    onClick={() => openPage(item.toLowerCase())}
                     className="text-gray-600 hover:text-sky-600 transition-colors duration-200 font-medium text-sm"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
