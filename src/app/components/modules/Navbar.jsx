@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 import { Dropdown } from '../assets/Dropdown';
-import { getProjectDetails } from '@/app/utils/GetProjectDetails';
+import { getProjectDetails } from '@/app/utils/functions/GetProjectDetails';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
