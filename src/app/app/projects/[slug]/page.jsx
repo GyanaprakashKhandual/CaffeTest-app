@@ -34,11 +34,13 @@ export default async function ProjectPage({ params }) {
         <div>
           <Navbar/>
         </div>
-        <h1 className="text-3xl font-bold">{project.projectName}</h1>
+        <div className="p-6">
+          <h1 className="text-3xl font-bold">{project.projectName}</h1>
         <p className="mt-4 text-gray-700">{project.projectDesc}</p>
         <p className="mt-2 text-sm text-gray-500">
           Created At: {new Date(project.createdAt).toLocaleString()}
         </p>
+        </div>
       </div>
     );
   } catch (error) {
