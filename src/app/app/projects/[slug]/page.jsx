@@ -30,7 +30,7 @@ export default async function ProjectPage({ params }) {
     const project = await getProjectBySlug(slug);
 
     return (
-      <div className="p-6">
+      <div className="">
         <div>
           <Navbar/>
         </div>

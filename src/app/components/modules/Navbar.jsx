@@ -62,8 +62,8 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-white via-sky-50 to-blue-100 backdrop-blur-md border-b border-blue-200/30 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 bg-gradient-to-r from-blue-100 via-sky-50 to-blue-100 backdrop-blur-md border-b border-blue-200/30">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
           {/* Mobile hamburger menu */}
@@ -101,7 +101,10 @@ export default function Navbar() {
           </div>
 
           {/* Logo/Brand */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center gap-3">
+            <div>
+                <Menu className='h-6 w-6 text-black' />
+            </div>
             <motion.h1 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -129,7 +132,7 @@ export default function Navbar() {
                 placeholder="Search..."
                 onFocus={() => setSearchFocus(true)}
                 onBlur={() => setSearchFocus(false)}
-                className="block w-full pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-full bg-white/70 backdrop-blur-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="block w-[500px] pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-full bg-white/70 backdrop-blur-sm placeholder-gray-500 focus:outline-none"
               />
             </motion.div>
           </div>
