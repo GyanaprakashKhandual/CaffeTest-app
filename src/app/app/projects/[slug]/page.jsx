@@ -1,4 +1,5 @@
 import Navbar from "@/app/components/modules/Navbar";
+import TestTypeList from "@/app/components/modules/Window";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,9 @@ export default async function ProjectPage({ params }) {
         <p className="mt-2 text-sm text-gray-500">
           Created At: {new Date(project.createdAt).toLocaleString()}
         </p>
+        </div>
+        <div>
+          <TestTypeList/>
         </div>
       </div>
     );
