@@ -19,6 +19,7 @@ import {
 
 import { Dropdown } from '../assets/Dropdown';
 import { getProjectDetails } from '@/app/utils/functions/GetProjectDetails';
+import TestTypeList from './Window';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function Navbar() {
   const [selectedView, setSelectedView] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
   const [project, setProject] = useState(null);
+  const [testTypeIsOpen, setTestTypeIsOpen ] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -90,9 +92,14 @@ export default function Navbar() {
 
           {/* Brand */}
           <div className="flex-shrink-0 flex items-center gap-3">
-            <div>
-              <Menu className='h-6 w-6 text-black' />
-            </div>
+  <button
+    onClick={() => setTestTypeIsOpen(!testTypeIsOpen)}
+    className="p-1 rounded-md hover:bg-gray-100"
+  >
+    <Menu className="h-6 w-6 text-black" />
+  </button>
+   <TestTypeList sidebarOpen={testTypeIsOpen} />
+
             <motion.h1 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
