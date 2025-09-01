@@ -17,25 +17,39 @@ export default function TestTypeList({ sidebarOpen }) {
   if (!testTypes) return <p>Loading test types...</p>;
 
   return (
-    <div className="flex h-screen bg-gradient-radial from-white via-sky-50 to-blue-50">
+    <>
+      {/* Sidebar Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
-            initial={{ x: -100, opacity: 0 }}
+            initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -100, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="w-60 min-w-60 max-w-60 bg-white shadow-lg border-r border-gray-200 overflow-y-auto"
+            exit={{ x: -300, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="fixed left-0 top-0 h-full w-72 mt-15"
           >
-            <div className="p-2 space-y-2">
+            <div className="p-4 space-y-3 mt-16">
               {testTypes.data.map((testType, index) => (
                 <motion.button
                   key={testType._id}
                   onClick={() => setSelectedTest(testType)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-full p-3 rounded-lg text-sm font-medium ${
+                  className={`w-full p-4 rounded-lg text-left font-medium ${
                     selectedTest?._id === testType._id
                       ? "bg-blue-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -48,9 +62,6 @@ export default function TestTypeList({ sidebarOpen }) {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Main Content */}
-      <div className="flex-1 p-6">{/* your content */}</div>
-    </div>
+    </>
   );
 }

@@ -92,12 +92,12 @@ export default function Navbar() {
 
           {/* Brand */}
           <div className="flex-shrink-0 flex items-center gap-3">
-  <button
+  <p
     onClick={() => setTestTypeIsOpen(!testTypeIsOpen)}
-    className="p-1 rounded-md hover:bg-gray-100"
+    className="rounded-md hover:bg-gray-100"
   >
     <Menu className="h-6 w-6 text-black" />
-  </button>
+  </p>
    <TestTypeList sidebarOpen={testTypeIsOpen} />
 
             <motion.h1 
