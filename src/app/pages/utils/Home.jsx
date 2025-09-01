@@ -54,7 +54,7 @@ export default function CaffetestLanding() {
   const benefits = [
     "Automated test case generation",
     "Real-time pass/fail results",
-    "Multiple project separation", 
+    "Multiple project separation",
     "Cucumber syntax support",
     "OpenAI-powered insights",
     "Dashboard integration"
@@ -63,21 +63,21 @@ export default function CaffetestLanding() {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-sky-50">
       {/* Header */}
-      <motion.header 
+      <motion.header
         className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-sky-100"
         style={{ opacity: headerOpacity }}
       >
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <motion.div 
+            <motion.div
               className="flex items-center space-x-3"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              
-                <FaCoffee className="w-8 h-8 text-blue-900" />
-              
+
+              <FaCoffee className="w-8 h-8 text-blue-900" />
+
               <span className="text-xl font-semibold text-gray-900">
                 Caffetest
               </span>
@@ -98,9 +98,9 @@ export default function CaffetestLanding() {
                   </motion.a>
                 ))}
               </nav>
-              
+
               <motion.button
-              onClick={() => router.push('/auth')}
+                onClick={() => router.push('/auth')}
                 className="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ export default function CaffetestLanding() {
             animate="animate"
             variants={staggerContainer}
           >
-            <motion.h1 
+            <motion.h1
               className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight"
               variants={fadeInUp}
             >
@@ -143,16 +143,16 @@ export default function CaffetestLanding() {
               <br />
               <span className="text-blue-600">Automation Platform</span>
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed"
               variants={fadeInUp}
             >
-              AI-powered automation testing that transforms your VS Code workflow with intelligent 
+              AI-powered automation testing that transforms your VS Code workflow with intelligent
               test generation, real-time analytics, and seamless bug tracking.
             </motion.p>
 
-            <motion.div 
+            <motion.div
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
               variants={fadeInUp}
             >
@@ -164,7 +164,7 @@ export default function CaffetestLanding() {
                 <FaPlay className="w-4 h-4" />
                 <span>Get Started Free</span>
               </motion.button>
-              
+
               <motion.button
                 className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2"
                 whileHover={{ scale: 1.02 }}
@@ -223,7 +223,7 @@ export default function CaffetestLanding() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
             variants={staggerContainer}
             initial="initial"
@@ -262,11 +262,11 @@ export default function CaffetestLanding() {
                 Why Choose Caffetest?
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Transform your testing workflow with AI-powered automation that saves time, 
+                Transform your testing workflow with AI-powered automation that saves time,
                 reduces errors, and provides actionable insights for better software quality.
               </p>
-              
-              <motion.div 
+
+              <motion.div
                 className="space-y-3"
                 variants={staggerContainer}
                 initial="initial"
@@ -302,21 +302,21 @@ export default function CaffetestLanding() {
                     <FaChartLine className="text-white text-lg" />
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Success Rate</span>
                     <span className="font-semibold text-green-600">94.2%</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2">
-                    <motion.div 
+                    <motion.div
                       className="h-2 bg-green-500 rounded-full"
                       initial={{ width: 0 }}
                       whileInView={{ width: "94.2%" }}
                       transition={{ duration: 1.2, delay: 0.5 }}
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4 mt-6">
                     <div className="text-center p-4 bg-gray-50 rounded-lg">
                       <div className="text-xl font-bold text-blue-600">1,247</div>
@@ -361,7 +361,7 @@ export default function CaffetestLanding() {
                 color: "bg-blue-600"
               },
               {
-                step: "02", 
+                step: "02",
                 title: "AI Analysis & Tracking",
                 description: "Our system tracks test data, analyzes results using OpenAI, and generates intelligent insights.",
                 color: "bg-green-600"
@@ -388,7 +388,7 @@ export default function CaffetestLanding() {
                   <h3 className="text-xl font-semibold mb-3 text-gray-900">{step.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{step.description}</p>
                 </div>
-                
+
                 {index < 2 && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-6 h-6 text-gray-300">
                     <FaArrowRight className="w-full h-full" />
@@ -415,7 +415,7 @@ export default function CaffetestLanding() {
           <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of developers who have revolutionized their testing workflow with Caffetest
           </p>
-          
+
           <motion.button
             className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200"
             whileHover={{ scale: 1.02 }}
@@ -437,13 +437,13 @@ export default function CaffetestLanding() {
               viewport={{ once: true }}
             >
               <div className="flex items-center space-x-3 mb-4">
-                
-                  <FaCoffee className="w-8 h-8 text-blue-900" />
-                
+
+                <FaCoffee className="w-8 h-8 text-blue-900" />
+
                 <span className="text-lg font-semibold text-white">Caffetest</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                AI-powered automation testing for modern development teams. 
+                AI-powered automation testing for modern development teams.
                 Streamline your workflow with intelligent test generation and analytics.
               </p>
               <div className="flex space-x-3">
@@ -467,7 +467,7 @@ export default function CaffetestLanding() {
                 links: ["Features", "Integrations", "Pricing", "Documentation"]
               },
               {
-                title: "Company", 
+                title: "Company",
                 links: ["About Us", "Careers", "Blog", "Contact"]
               },
               {
@@ -486,8 +486,8 @@ export default function CaffetestLanding() {
                 <ul className="space-y-2">
                   {column.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <a 
-                        href="#" 
+                      <a
+                        href="#"
                         className="text-gray-400 hover:text-white transition-colors duration-200 text-sm"
                       >
                         {link}

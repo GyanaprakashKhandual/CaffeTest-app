@@ -33,7 +33,7 @@ const Sidebar = () => {
 
 
   const { selectedProject, setSelectedProject } = useProject();
-  
+
 
   const router = useRouter();
 

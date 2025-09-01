@@ -8,9 +8,9 @@ import { useProject } from "@/app/script/Projectcontext";
 
 
 const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
-  const [formData, setFormData] = useState({ 
-    projectName: "", 
-    projectDesc: "" 
+  const [formData, setFormData] = useState({
+    projectName: "",
+    projectDesc: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -103,10 +103,9 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
   };
 
   return (
-    <div 
-      className={`fixed inset-0 transition-all duration-300 ease-out flex items-center justify-center p-4 ${
-        isVisible ? 'bg-opacity-50' : 'bg-opacity-0'
-      }`}
+    <div
+      className={`fixed inset-0 transition-all duration-300 ease-out flex items-center justify-center p-4 ${isVisible ? 'bg-opacity-50' : 'bg-opacity-0'
+        }`}
     >
       {/* Success Alert */}
       {successMessage && (
@@ -114,23 +113,21 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
           <Alert type="success" message={successMessage} />
         </div>
       )}
-      <div 
+      <div
         className="absolute inset-0"
         onClick={handleClose}
       />
-      
-      <div className={`relative bg-white rounded-lg shadow-2xl w-full max-w-lg mx-auto transform transition-all duration-300 ease-out ${
-        isVisible ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 -translate-y-4 opacity-0'
-      }`}>
+
+      <div className={`relative bg-white rounded-lg shadow-2xl w-full max-w-lg mx-auto transform transition-all duration-300 ease-out ${isVisible ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 -translate-y-4 opacity-0'
+        }`}>
         {/* ...existing code... */}
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-              type === "create" 
-                ? "bg-blue-100 text-blue-600" 
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${type === "create"
+                ? "bg-blue-100 text-blue-600"
                 : "bg-emerald-100 text-emerald-600"
-            }`}>
+              }`}>
               {type === "create" ? (
                 <Plus className="w-5 h-5" />
               ) : (
@@ -142,14 +139,14 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
                 {type === "create" ? "Create New Project" : "Edit Project"}
               </h3>
               <p className="text-sm text-gray-500 mt-0.5">
-                {type === "create" 
-                  ? "Add a new project to your workspace" 
+                {type === "create"
+                  ? "Add a new project to your workspace"
                   : "Update project information"
                 }
               </p>
             </div>
           </div>
-          
+
           <button
             onClick={handleClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200"
@@ -170,11 +167,10 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
               type="text"
               value={formData.projectName}
               onChange={(e) => handleInputChange("projectName", e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                errors.projectName 
-                  ? "border-red-300 focus:ring-red-500" 
+              className={`w-full px-4 py-3 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${errors.projectName
+                  ? "border-red-300 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500 hover:border-gray-400"
-              }`}
+                }`}
               placeholder="Enter project name"
               disabled={isLoading}
             />
@@ -195,11 +191,10 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
               value={formData.projectDesc}
               onChange={(e) => handleInputChange("projectDesc", e.target.value)}
               rows={4}
-              className={`w-full px-4 py-3 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 resize-none ${
-                errors.projectDesc 
-                  ? "border-red-300 focus:ring-red-500" 
+              className={`w-full px-4 py-3 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 resize-none ${errors.projectDesc
+                  ? "border-red-300 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500 hover:border-gray-400"
-              }`}
+                }`}
               placeholder="Describe your project objectives, scope, and key deliverables..."
               disabled={isLoading}
             />
@@ -224,11 +219,10 @@ const ProjectModal = ({ type, project, token, onClose, onSuccess }) => {
           <button
             onClick={handleSubmit}
             disabled={isLoading || !formData.projectName.trim() || !formData.projectDesc.trim()}
-            className={`px-6 py-2.5 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 font-medium flex items-center space-x-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed ${
-              type === "create"
+            className={`px-6 py-2.5 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 font-medium flex items-center space-x-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed ${type === "create"
                 ? "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 disabled:bg-blue-400"
                 : "bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 disabled:bg-emerald-400"
-            }`}
+              }`}
           >
             {isLoading ? (
               <div className="flex items-center space-x-2">

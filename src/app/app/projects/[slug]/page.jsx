@@ -33,10 +33,10 @@ export default async function ProjectPage({ params }) {
     return (
       <div className="">
         <div>
-          <Navbar/>
+          <Navbar />
         </div>
         <div className="fixed left-0 top-0 h-full w-72 mt-16 bg-gradient-radial from-blue-100 via-sky-100 to-purple-100">
-          <TestTypeList/>
+          <TestTypeList />
         </div>
       </div>
     );

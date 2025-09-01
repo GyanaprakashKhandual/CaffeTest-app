@@ -9,18 +9,18 @@ import { useRouter } from 'next/navigation';
 
 const AuthSystem = () => {
   // ==================== STATE MANAGEMENT ====================
-  
+
   // Core authentication states
   const [isLogin, setIsLogin] = useState(true); // Toggle between login/register modes
   const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
   const [showOTPForm, setShowOTPForm] = useState(false); // OTP verification form visibility
   const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
-  
+
   // Error and alert management
   const [error, setError] = useState(''); // General error messages
   const [alert, setAlert] = useState({ show: false, type: '', message: '' }); // Alert notifications
   const [passwordErrors, setPasswordErrors] = useState([]); // Password validation errors
-  
+
   // Form data state
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +33,7 @@ const AuthSystem = () => {
   const router = useRouter();
 
   // ==================== EFFECTS ====================
-  
+
   /**
    * Auto-clear error messages after 5 seconds
    * Improves UX by not keeping error messages visible indefinitely
@@ -57,7 +57,7 @@ const AuthSystem = () => {
   }, [alert]);
 
   // ==================== VALIDATION FUNCTIONS ====================
-  
+
   /**
    * Comprehensive password validation
    * Ensures strong password requirements are met
@@ -66,32 +66,32 @@ const AuthSystem = () => {
    */
   const validatePassword = (password) => {
     const errors = [];
-    
+
     // Minimum length requirement
     if (password.length < 8) {
       errors.push("Password must be at least 8 characters");
     }
-    
+
     // Uppercase letter requirement
     if (!/[A-Z]/.test(password)) {
       errors.push("Password must contain at least one uppercase letter");
     }
-    
+
     // Lowercase letter requirement
     if (!/[a-z]/.test(password)) {
       errors.push("Password must contain at least one lowercase letter");
     }
-    
+
     // Number requirement
     if (!/[0-9]/.test(password)) {
       errors.push("Password must contain at least one number");
     }
-    
+
     // Special character requirement
     if (!/[@$!%*?&]/.test(password)) {
       errors.push("Password must contain at least one special character (@$!%*?&)");
     }
-    
+
     setPasswordErrors(errors);
     return errors.length === 0;
   };
@@ -117,7 +117,7 @@ const AuthSystem = () => {
   };
 
   // ==================== EVENT HANDLERS ====================
-  
+
   /**
    * Handle form input changes
    * Clears errors and validates password in real-time
@@ -126,10 +126,10 @@ const AuthSystem = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear error when user starts typing (immediate feedback)
     if (error) setError('');
-    
+
     // Real-time password validation for registration
     if (name === 'password' && !isLogin) {
       validatePassword(value);
@@ -145,7 +145,7 @@ const AuthSystem = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       // Validate email format before proceeding
       if (!validateEmail(formData.email)) {
@@ -168,7 +168,7 @@ const AuthSystem = () => {
       }
 
       console.log('Sending OTP to:', formData.email);
-      
+
       // API call to send OTP
       const response = await fetch(`http://localhost:5000/api/v1/auth/send-otp`, {
         method: 'POST',
@@ -177,9 +177,9 @@ const AuthSystem = () => {
         },
         body: JSON.stringify({ email: formData.email }),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         // Success: Show OTP form and display success message
         setShowOTPForm(true);
@@ -214,7 +214,7 @@ const AuthSystem = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       // Validate OTP format
       if (!validateOTP(formData.otp)) {
@@ -242,9 +242,9 @@ const AuthSystem = () => {
         },
         body: JSON.stringify(formData),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         // Success: Store token and redirect to login
         localStorage.setItem('token', data.token);
@@ -254,7 +254,7 @@ const AuthSystem = () => {
           type: 'success',
           message: 'Registration successful! Redirecting to login...'
         });
-        
+
         // Auto-redirect to login after 2 seconds
         setTimeout(() => {
           setIsLogin(true);
@@ -283,73 +283,73 @@ const AuthSystem = () => {
    * Authenticates user with email and password
    * @param {Event} e - Form submit event
    */
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  setError('');
-  
-  try {
-    // Validate email format
-    if (!validateEmail(formData.email)) {
-      throw new Error('Please enter a valid email address');
-    }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-    // Check password is provided
-    if (!formData.password) {
-      throw new Error('Password is required');
-    }
-
-    // API call to authenticate user
-    const response = await fetch(`http://localhost:5000/api/v1/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password
-      }),
-    });
-
-    let data;
     try {
-      data = await response.json();
-    } catch {
-      throw new Error('Invalid server response');
-    }
+      // Validate email format
+      if (!validateEmail(formData.email)) {
+        throw new Error('Please enter a valid email address');
+      }
 
-    if (response.ok) {
-      // Success: Store token and redirect to app
-      document.cookie = `token=${data.token}; path=/; max-age=86400`;
-      console.log('Token saved in the cookie');
-      localStorage.setItem('token', data.token);
+      // Check password is provided
+      if (!formData.password) {
+        throw new Error('Password is required');
+      }
 
-      setError('');
-      setAlert({
-        show: true,
-        type: 'success',
-        message: 'Login successful! Welcome to Calf.'
+      // API call to authenticate user
+      const response = await fetch(`http://localhost:5000/api/v1/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
       });
 
-      // Redirect to main app after 1.5 seconds
-      setTimeout(() => {
-        router.push('/app');
-      }, 1500);
-    } else {
-      throw new Error(data.message || 'Login failed');
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error('Invalid server response');
+      }
+
+      if (response.ok) {
+        // Success: Store token and redirect to app
+        document.cookie = `token=${data.token}; path=/; max-age=86400`;
+        console.log('Token saved in the cookie');
+        localStorage.setItem('token', data.token);
+
+        setError('');
+        setAlert({
+          show: true,
+          type: 'success',
+          message: 'Login successful! Welcome to Calf.'
+        });
+
+        // Redirect to main app after 1.5 seconds
+        setTimeout(() => {
+          router.push('/app');
+        }, 1500);
+      } else {
+        throw new Error(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setError(error.message);
+      setAlert({
+        show: true,
+        type: 'error',
+        message: error.message
+      });
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error('Error logging in:', error);
-    setError(error.message);
-    setAlert({
-      show: true,
-      type: 'error',
-      message: error.message
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
 
   /**
@@ -371,7 +371,7 @@ const handleLogin = async (e) => {
   };
 
   // ==================== UTILITY FUNCTIONS ====================
-  
+
   /**
    * Check if Send OTP button should be disabled
    * @returns {boolean} - True if button should be disabled
@@ -389,12 +389,12 @@ const handleLogin = async (e) => {
   };
 
   // ==================== RENDER ====================
-  
+
   return (
     <div className="min-h-screen flex" style={{
       background: 'radial-gradient(circle, #fce7f3, #ffffff, #f0f9ff, #dbeafe)'
     }}>
-      
+
       {/* LEFT SIDE - Welcome Section */}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
         <div className="max-w-lg text-center">
@@ -407,15 +407,15 @@ const handleLogin = async (e) => {
               Welcome to <span className="text-blue-600">Calf</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Combine the power of <span className="font-semibold text-blue-600">Selenium</span>, 
-              <span className="font-semibold text-green-600"> Jira</span>, 
-              <span className="font-semibold text-orange-600"> Grafana</span>, and 
+              Combine the power of <span className="font-semibold text-blue-600">Selenium</span>,
+              <span className="font-semibold text-green-600"> Jira</span>,
+              <span className="font-semibold text-orange-600"> Grafana</span>, and
               <span className="font-semibold text-purple-600"> AI</span> to automate your testing workflow.
             </p>
             <p className="text-lg text-gray-500 mb-12">
               Let AI generate test cases, manage bugs, and deliver comprehensive reports automatically.
             </p>
-            
+
             {/* Feature Icons */}
             <div className="flex justify-center space-x-8 mb-8">
               <motion.div
@@ -425,7 +425,7 @@ const handleLogin = async (e) => {
                 <FaRocket className="text-3xl text-blue-600 mb-2" />
                 <span className="text-sm font-medium text-gray-700">Automation</span>
               </motion.div>
-              
+
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md"
@@ -433,7 +433,7 @@ const handleLogin = async (e) => {
                 <FaBug className="text-3xl text-green-600 mb-2" />
                 <span className="text-sm font-medium text-gray-700">Bug Tracking</span>
               </motion.div>
-              
+
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md"
@@ -441,7 +441,7 @@ const handleLogin = async (e) => {
                 <FaChartLine className="text-3xl text-orange-600 mb-2" />
                 <span className="text-sm font-medium text-gray-700">Analytics</span>
               </motion.div>
-              
+
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md"
@@ -457,7 +457,7 @@ const handleLogin = async (e) => {
       {/* RIGHT SIDE - Authentication Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          
+
           {/* Alert component - Shows success/error notifications */}
           {alert.show && (
             <div className="mb-4">
@@ -467,7 +467,7 @@ const handleLogin = async (e) => {
 
           {/* Animated form transitions */}
           <AnimatePresence mode="wait">
-            
+
             {/* LOGIN FORM */}
             {isLogin ? (
               <motion.div
@@ -484,10 +484,10 @@ const handleLogin = async (e) => {
                     <FcKey className="text-3xl" />
                   </div>
                 </div>
-                
+
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Welcome Back</h2>
                 <p className="text-center text-gray-600 mb-8">Sign in to continue your journey</p>
-                
+
                 <form onSubmit={handleLogin} className="space-y-6">
                   {/* Email Input */}
                   <div className="relative">
@@ -504,7 +504,7 @@ const handleLogin = async (e) => {
                       required
                     />
                   </div>
-                  
+
                   {/* Password Input with visibility toggle */}
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -531,28 +531,27 @@ const handleLogin = async (e) => {
                       )}
                     </button>
                   </div>
-                  
+
                   {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isLoading || isLoginDisabled()}
-                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      isLoading || isLoginDisabled()
-                        ? 'bg-blue-400 cursor-not-allowed text-white' 
+                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isLoading || isLoginDisabled()
+                        ? 'bg-blue-400 cursor-not-allowed text-white'
                         : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
+                      }`}
                   >
                     {isLoading ? 'Signing In...' : 'Sign In'}
                   </button>
                 </form>
-                
+
                 {/* Divider */}
                 <div className="my-6 flex items-center">
                   <div className="flex-grow border-t border-gray-300"></div>
                   <span className="mx-4 text-gray-500">or</span>
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
-                
+
                 {/* Google OAuth Button */}
                 <button
                   onClick={handleGoogleAuth}
@@ -561,7 +560,7 @@ const handleLogin = async (e) => {
                   <FcGoogle className="text-xl" />
                   Continue with Google
                 </button>
-                
+
                 {/* Switch to Register */}
                 <p className="text-center mt-8 text-gray-600">
                   Don't have an account?{' '}
@@ -573,9 +572,9 @@ const handleLogin = async (e) => {
                   </button>
                 </p>
               </motion.div>
-              
+
             ) : showOTPForm ? (
-              
+
               /* OTP VERIFICATION FORM */
               <motion.div
                 key="otp"
@@ -592,19 +591,19 @@ const handleLogin = async (e) => {
                 >
                   <FaArrowLeft className="mr-2" /> Back
                 </button>
-                
+
                 {/* Header */}
                 <div className="flex justify-center mb-6">
                   <div className="p-3 bg-blue-100 rounded-full">
                     <FcKey className="text-3xl" />
                   </div>
                 </div>
-                
+
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Verify Email</h2>
                 <p className="text-center text-gray-600 mb-8">
                   Enter the OTP sent to {formData.email}
                 </p>
-                
+
                 <form onSubmit={handleRegister} className="space-y-6">
                   {/* OTP Input */}
                   <div className="relative">
@@ -623,24 +622,23 @@ const handleLogin = async (e) => {
                       pattern="\d{6}"
                     />
                   </div>
-                  
+
                   {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isLoading || !formData.otp}
-                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      isLoading || !formData.otp
-                        ? 'bg-blue-400 cursor-not-allowed text-white' 
+                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isLoading || !formData.otp
+                        ? 'bg-blue-400 cursor-not-allowed text-white'
                         : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
+                      }`}
                   >
                     {isLoading ? 'Verifying...' : 'Verify & Create Account'}
                   </button>
                 </form>
               </motion.div>
-              
+
             ) : (
-              
+
               /* REGISTRATION FORM */
               <motion.div
                 key="register"
@@ -656,10 +654,10 @@ const handleLogin = async (e) => {
                     <FcBusinessman className="text-3xl" />
                   </div>
                 </div>
-                
+
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Create Account</h2>
                 <p className="text-center text-gray-600 mb-8">Join us to start your adventure</p>
-                
+
                 <form onSubmit={handleSendOTP} className="space-y-6">
                   {/* Name Input */}
                   <div className="relative">
@@ -676,7 +674,7 @@ const handleLogin = async (e) => {
                       required
                     />
                   </div>
-                  
+
                   {/* Email Input */}
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -692,7 +690,7 @@ const handleLogin = async (e) => {
                       required
                     />
                   </div>
-                  
+
                   {/* Password Input */}
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -720,7 +718,7 @@ const handleLogin = async (e) => {
                       )}
                     </button>
                   </div>
-                  
+
                   {/* Password Validation Errors Display */}
                   {passwordErrors.length > 0 && (
                     <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -735,28 +733,27 @@ const handleLogin = async (e) => {
                       </ul>
                     </div>
                   )}
-                  
+
                   {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isLoading || isSendOTPDisabled()}
-                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                      isLoading || isSendOTPDisabled()
-                        ? 'bg-blue-400 cursor-not-allowed text-white' 
+                    className={`w-full py-3 rounded-lg font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isLoading || isSendOTPDisabled()
+                        ? 'bg-blue-400 cursor-not-allowed text-white'
                         : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
+                      }`}
                   >
                     {isLoading ? 'Sending OTP...' : 'Send OTP'}
                   </button>
                 </form>
-                
+
                 {/* Divider */}
                 <div className="my-6 flex items-center">
                   <div className="flex-grow border-t border-gray-300"></div>
                   <span className="mx-4 text-gray-500">or</span>
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
-                
+
                 {/* Google OAuth Button */}
                 <button
                   onClick={handleGoogleAuth}
@@ -765,7 +762,7 @@ const handleLogin = async (e) => {
                   <FcGoogle className="text-xl" />
                   Continue with Google
                 </button>
-                
+
                 {/* Switch to Login */}
                 <p className="text-center mt-8 text-gray-600">
                   Already have an account?{' '}

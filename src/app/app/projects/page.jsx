@@ -3,9 +3,9 @@ import { cookies } from 'next/headers';
 
 export const dynamic = "force-dynamic";
 
-async function getProjectById(id) { 
+async function getProjectById(id) {
   console.log("Fetching project with ID:", id);
-  
+
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value;
 
@@ -19,11 +19,11 @@ async function getProjectById(id) {
 
   if (!res.ok) {
     console.error("API failed:", res.status, res.statusText);
-    
+
     if (res.status === 401) {
       throw new Error("Unauthorized: Please log in");
     }
-    
+
     throw new Error("Failed to fetch project");
   }
 
@@ -32,7 +32,7 @@ async function getProjectById(id) {
 
 export default async function ProjectPage({ params }) {
   const { id } = params; // ✅ no await
-  
+
   try {
     const project = await getProjectById(id);
 

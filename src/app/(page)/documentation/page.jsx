@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaCoffee, 
-  FaHome, 
-  FaCog, 
-  FaProjectDiagram, 
-  FaTerminal, 
+import {
+  FaCoffee,
+  FaHome,
+  FaCog,
+  FaProjectDiagram,
+  FaTerminal,
   FaPuzzlePiece,
   FaNetworkWired,
   FaHandshake,
@@ -82,7 +82,7 @@ const CaffetestDocs = () => {
             <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
               <h4 className="font-mono text-sm font-semibold mb-2">caffetest.config.js</h4>
               <pre className="text-sm overflow-x-auto">
-{`{
+                {`{
   "testDir": "./tests",
   "timeout": 30000,
   "retries": 2,
@@ -348,7 +348,7 @@ const CaffetestDocs = () => {
     <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
       <div className="flex bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
         {/* Sidebar */}
-        <motion.div 
+        <motion.div
           initial={{ x: -300 }}
           animate={{ x: 0 }}
           className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col"
@@ -367,16 +367,15 @@ const CaffetestDocs = () => {
               {sidebarItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeSection === item.id;
-                
+
                 return (
                   <motion.button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 ${
-                      isActive 
-                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-100 border border-amber-200 dark:border-amber-700' 
+                    className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 ${isActive
+                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-100 border border-amber-200 dark:border-amber-700'
                         : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                    }`}
+                      }`}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -442,7 +441,7 @@ const CaffetestDocs = () => {
                   </h2>
                   <div className="h-1 w-20 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"></div>
                 </div>
-                
+
                 <div className="prose dark:prose-invert max-w-none">
                   {currentContent.content}
                 </div>
