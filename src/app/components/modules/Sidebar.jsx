@@ -12,7 +12,10 @@ import {
   Mail,
   ChevronDown,
   ChevronUp,
-  Settings
+  Settings,
+  Copy,
+  X,
+  CheckCircle
 } from "lucide-react";
 import { ThreeDotsDropdown } from "../assets/Dropdown";
 import ProjectModal from "../assets/Modal";
@@ -446,5 +449,266 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+const ProjectSidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [testTypes, setTestTypes] = useState([]);
+  const [projectDetails, setProjectDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
 
+  // Fetch data when sidebar opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchData();
+    }
+  }, [isOpen]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [project, testTypesResponse] = await Promise.all([
+        getProjectDetails(),
+        getTestTypes()
+      ]);
+      
+      setProjectDetails(project);
+      setTestTypes(testTypesResponse?.data || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = async (text, type) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(`${type}-${text}`);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const sidebarVariants = {
+    closed: {
+      x: '100%',
+      opacity: 0,
+    },
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 300,
+        damping: 30,
+      }
+    }
+  };
+
+  const overlayVariants = {
+    closed: { opacity: 0 },
+    open: { opacity: 1 }
+  };
+
+  const itemVariants = {
+    closed: { x: 20, opacity: 0 },
+    open: { x: 0, opacity: 1 }
+  };
+
+  const CopyButton = ({ text, type, label }) => {
+    const isCopied = copiedId === `${type}-${text}`;
+    
+    return (
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => copyToClipboard(text, type)}
+        className="p-1.5 text-gray-400 hover:text-blue-600 transition-colors rounded"
+        title={`Copy ${label}`}
+      >
+        {isCopied ? (
+          <CheckCircle className="h-4 w-4 text-green-500" />
+        ) : (
+          <Copy className="h-4 w-4" />
+        )}
+      </motion.button>
+    );
+  };
+
+  return (
+    <>
+      {/* Trigger Button */}
+      <motion.button
+        whileHover={{ scale: 1.1, rotate: 90 }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-2 text-gray-600 hover:text-blue-600 rounded-lg transition-colors"
+      >
+        <Settings className="h-5 w-5" />
+      </motion.button>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={overlayVariants}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Sidebar */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={sidebarVariants}
+            className="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 flex flex-col"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <h2 className="text-xl font-semibold text-gray-800">Project Details</h2>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsOpen(false)}
+                className="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </motion.button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {loading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Project Information */}
+                  {projectDetails && (
+                    <motion.div
+                      initial="closed"
+                      animate="open"
+                      variants={itemVariants}
+                      transition={{ delay: 0.1 }}
+                      className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100"
+                    >
+                      <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                        {projectDetails.projectName}
+                      </h3>
+                      <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-gray-200">
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                            Project ID
+                          </p>
+                          <p className="text-sm font-mono text-gray-700 mt-1">
+                            {projectDetails._id}
+                          </p>
+                        </div>
+                        <CopyButton 
+                          text={projectDetails._id} 
+                          type="project" 
+                          label="Project ID" 
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Test Types */}
+                  <motion.div
+                    initial="closed"
+                    animate="open"
+                    variants={itemVariants}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                      Test Types ({testTypes.length})
+                    </h3>
+                    
+                    <div className="space-y-3">
+                      {testTypes.map((testType, index) => (
+                        <motion.div
+                          key={testType._id}
+                          initial="closed"
+                          animate="open"
+                          variants={itemVariants}
+                          transition={{ delay: 0.3 + index * 0.1 }}
+                          className="bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all duration-200 hover:shadow-md"
+                        >
+                          <div className="p-4">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <h4 className="font-medium text-gray-800 text-sm">
+                                  {testType.testTypeName}
+                                </h4>
+                                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                                  {testType.testTypeDesc}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                              <div className="flex-1">
+                                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                                  Test Type ID
+                                </p>
+                                <p className="text-xs font-mono text-gray-700 mt-1 break-all">
+                                  {testType._id}
+                                </p>
+                              </div>
+                              <CopyButton 
+                                text={testType._id} 
+                                type="testType" 
+                                label="Test Type ID" 
+                              />
+                            </div>
+
+                            {/* Framework Badge */}
+                            <div className="mt-3">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                {testType.testFramework}
+                              </span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {testTypes.length === 0 && !loading && (
+                      <div className="text-center py-8 text-gray-500">
+                        <p className="text-sm">No test types found</p>
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-gray-200 p-4 bg-gray-50">
+              <p className="text-xs text-gray-500 text-center">
+                Last updated: {new Date().toLocaleTimeString()}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+// Export using ES6 syntax instead of module.exports
+export { Sidebar, ProjectSidebar };

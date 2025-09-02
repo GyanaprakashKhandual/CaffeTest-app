@@ -1,4 +1,5 @@
-import ProjectSidebar from "../components/modules/Sidebar";
+import { Sidebar } from "../components/modules/Sidebar";
+
 
 export const metadata = {
   title: "Dashboard - Integrate with code cloud",
@@ -8,7 +9,7 @@ export const metadata = {
 function Page() {
   return (
     <div className="flex h-screen">
-      <ProjectSidebar />
+      <Sidebar/>
     </div>
   );
 }
