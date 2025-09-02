@@ -452,18 +452,22 @@ const Sidebar = () => {
   );
 };
 
+import { Cog, Database, Shield } from 'lucide-react';
+
+
 const SettingSidebar = ({ isOpen, toggleSidebar }) => {
   const [testTypes, setTestTypes] = useState([]);
   const [projectDetails, setProjectDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [activeMenu, setActiveMenu] = useState('project'); // 'project', 'app', 'database', 'security'
 
   // Fetch data when sidebar opens
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && activeMenu === 'project') {
       fetchData();
     }
-  }, [isOpen]);
+  }, [isOpen, activeMenu]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -518,6 +522,13 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
     open: { x: 0, opacity: 1 }
   };
 
+  const menuItems = [
+    { id: 'project', label: 'Project Details', icon: FolderOpen },
+    { id: 'app', label: 'App & Preference', icon: Cog },
+    { id: 'database', label: 'Database Settings', icon: Database },
+    { id: 'security', label: 'Security & Access', icon: Shield }
+  ];
+
   const CopyButton = ({ text, type, label }) => {
     const isCopied = copiedId === `${type}-${text}`;
     
@@ -536,6 +547,333 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
         )}
       </motion.button>
     );
+  };
+
+  const renderProjectDetails = () => (
+    <div className="space-y-6">
+      {/* Project Information */}
+      {projectDetails && (
+        <motion.div
+          initial="closed"
+          animate="open"
+          variants={itemVariants}
+          transition={{ delay: 0.1 }}
+          className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100"
+        >
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            {projectDetails.projectName}
+          </h3>
+          <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-gray-200">
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                Project ID
+              </p>
+              <p className="text-sm font-mono text-gray-700 mt-1">
+                {projectDetails._id}
+              </p>
+            </div>
+            <CopyButton 
+              text={projectDetails._id} 
+              type="project" 
+              label="Project ID" 
+            />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Test Types */}
+      <motion.div
+        initial="closed"
+        animate="open"
+        variants={itemVariants}
+        transition={{ delay: 0.2 }}
+      >
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Test Types ({testTypes.length})
+        </h3>
+        
+        <div className="space-y-3">
+          {testTypes.map((testType, index) => (
+            <motion.div
+              key={testType._id}
+              initial="closed"
+              animate="open"
+              variants={itemVariants}
+              transition={{ delay: 0.3 + index * 0.1 }}
+              className="bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all duration-200 hover:shadow-md"
+            >
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-800 text-sm">
+                      {testType.testTypeName}
+                    </h4>
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                      {testType.testTypeDesc}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                  <div className="flex-1">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                      Test Type ID
+                    </p>
+                    <p className="text-xs font-mono text-gray-700 mt-1 break-all">
+                      {testType._id}
+                    </p>
+                  </div>
+                  <CopyButton 
+                    text={testType._id} 
+                    type="testType" 
+                    label="Test Type ID" 
+                  />
+                </div>
+
+                {/* Framework Badge */}
+                <div className="mt-3">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {testType.testFramework}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {testTypes.length === 0 && !loading && (
+          <div className="text-center py-8 text-gray-500">
+            <p className="text-sm">No test types found</p>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+
+  const renderAppPreferences = () => (
+    <div className="space-y-6">
+      <motion.div
+        initial="closed"
+        animate="open"
+        variants={itemVariants}
+        transition={{ delay: 0.1 }}
+        className="space-y-4"
+      >
+        {/* Theme Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Theme</h4>
+          <div className="space-y-2">
+            <label className="flex items-center space-x-3">
+              <input type="radio" name="theme" className="text-blue-600" defaultChecked />
+              <span className="text-sm text-gray-700">Light Theme</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input type="radio" name="theme" className="text-blue-600" />
+              <span className="text-sm text-gray-700">Dark Theme</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input type="radio" name="theme" className="text-blue-600" />
+              <span className="text-sm text-gray-700">Auto (System)</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Personal Information */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Personal Information</h4>
+          <div className="space-y-3">
+            <div>
+              <label className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                Display Name
+              </label>
+              <input 
+                type="text" 
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your name"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                Email
+              </label>
+              <input 
+                type="email" 
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Key Management */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">API Key Management</h4>
+          <div className="space-y-3">
+            <button className="w-full text-left px-3 py-2 bg-blue-50 hover:bg-blue-100 rounded-md text-sm text-blue-700 transition-colors">
+              Generate New API Key
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md text-sm text-gray-700 transition-colors">
+              View Active Keys
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-red-50 hover:bg-red-100 rounded-md text-sm text-red-700 transition-colors">
+              Revoke All Keys
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  const renderDatabaseSettings = () => (
+    <div className="space-y-6">
+      <motion.div
+        initial="closed"
+        animate="open"
+        variants={itemVariants}
+        transition={{ delay: 0.1 }}
+        className="space-y-4"
+      >
+        {/* Connection Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Database Connection</h4>
+          <div className="space-y-3">
+            <div>
+              <label className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                Connection String
+              </label>
+              <div className="flex items-center space-x-2 mt-1">
+                <input 
+                  type="password" 
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="mongodb://localhost:27017"
+                />
+                <button className="px-3 py-2 bg-green-600 text-white rounded-md text-xs hover:bg-green-700 transition-colors">
+                  Test
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-700">Auto-connect on startup</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Backup & Restore */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Backup & Restore</h4>
+          <div className="space-y-2">
+            <button className="w-full text-left px-3 py-2 bg-blue-50 hover:bg-blue-100 rounded-md text-sm text-blue-700 transition-colors">
+              Create Backup
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-green-50 hover:bg-green-100 rounded-md text-sm text-green-700 transition-colors">
+              Restore from Backup
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-orange-50 hover:bg-orange-100 rounded-md text-sm text-orange-700 transition-colors">
+              Schedule Auto Backup
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  const renderSecurityAccess = () => (
+    <div className="space-y-6">
+      <motion.div
+        initial="closed"
+        animate="open"
+        variants={itemVariants}
+        transition={{ delay: 0.1 }}
+        className="space-y-4"
+      >
+        {/* Access Control */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Access Control</h4>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-700">Two-Factor Authentication</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-700">Session Timeout (mins)</span>
+              <input 
+                type="number" 
+                className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                defaultValue="30"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* User Management */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">User Management</h4>
+          <div className="space-y-2">
+            <button className="w-full text-left px-3 py-2 bg-blue-50 hover:bg-blue-100 rounded-md text-sm text-blue-700 transition-colors">
+              Invite Team Members
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-green-50 hover:bg-green-100 rounded-md text-sm text-green-700 transition-colors">
+              Manage Permissions
+            </button>
+            <button className="w-full text-left px-3 py-2 bg-yellow-50 hover:bg-yellow-100 rounded-md text-sm text-yellow-700 transition-colors">
+              Audit Logs
+            </button>
+          </div>
+        </div>
+
+        {/* Security Settings */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h4 className="font-medium text-gray-800 mb-3">Security Settings</h4>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-700">Encrypt Test Data</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <button className="w-full text-left px-3 py-2 bg-red-50 hover:bg-red-100 rounded-md text-sm text-red-700 transition-colors">
+              Reset Security Settings
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  const renderContent = () => {
+    if (loading && activeMenu === 'project') {
+      return (
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    switch (activeMenu) {
+      case 'project':
+        return renderProjectDetails();
+      case 'app':
+        return renderAppPreferences();
+      case 'database':
+        return renderDatabaseSettings();
+      case 'security':
+        return renderSecurityAccess();
+      default:
+        return renderProjectDetails();
+    }
   };
 
   return (
@@ -562,11 +900,11 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
             animate="open"
             exit="closed"
             variants={sidebarVariants}
-            className="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 flex flex-col"
+            className="fixed top-0 right-0 h-screen w-96 bg-white shadow-2xl z-50 flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-              <h2 className="text-xl font-semibold text-gray-800">Project Details</h2>
+              <h2 className="text-xl font-semibold text-gray-800">Settings</h2>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -577,117 +915,46 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
               </motion.button>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6">
-              {loading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {/* Project Information */}
-                  {projectDetails && (
-                    <motion.div
-                      initial="closed"
-                      animate="open"
-                      variants={itemVariants}
-                      transition={{ delay: 0.1 }}
-                      className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100"
+            {/* Menu Navigation */}
+            <div className="border-b border-gray-200 bg-gray-50">
+              <div className="flex">
+                {menuItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.button
+                      key={item.id}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setActiveMenu(item.id)}
+                      className={`flex-1 flex flex-col items-center py-3 px-2 text-xs font-medium transition-all duration-200 ${
+                        activeMenu === item.id
+                          ? 'text-blue-600 bg-white border-b-2 border-blue-600'
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-white'
+                      }`}
                     >
-                      <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                        {projectDetails.projectName}
-                      </h3>
-                      <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-gray-200">
-                        <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
-                            Project ID
-                          </p>
-                          <p className="text-sm font-mono text-gray-700 mt-1">
-                            {projectDetails._id}
-                          </p>
-                        </div>
-                        <CopyButton 
-                          text={projectDetails._id} 
-                          type="project" 
-                          label="Project ID" 
-                        />
-                      </div>
-                    </motion.div>
-                  )}
+                      <Icon className="h-4 w-4 mb-1" />
+                      <span className="text-center leading-tight">{item.label}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
 
-                  {/* Test Types */}
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-6">
+                <AnimatePresence mode="wait">
                   <motion.div
-                    initial="closed"
-                    animate="open"
-                    variants={itemVariants}
-                    transition={{ delay: 0.2 }}
+                    key={activeMenu}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                      Test Types ({testTypes.length})
-                    </h3>
-                    
-                    <div className="space-y-3">
-                      {testTypes.map((testType, index) => (
-                        <motion.div
-                          key={testType._id}
-                          initial="closed"
-                          animate="open"
-                          variants={itemVariants}
-                          transition={{ delay: 0.3 + index * 0.1 }}
-                          className="bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all duration-200 hover:shadow-md"
-                        >
-                          <div className="p-4">
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex-1">
-                                <h4 className="font-medium text-gray-800 text-sm">
-                                  {testType.testTypeName}
-                                </h4>
-                                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                                  {testType.testTypeDesc}
-                                </p>
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                              <div className="flex-1">
-                                <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
-                                  Test Type ID
-                                </p>
-                                <p className="text-xs font-mono text-gray-700 mt-1 break-all">
-                                  {testType._id}
-                                </p>
-                              </div>
-                              <CopyButton 
-                                text={testType._id} 
-                                type="testType" 
-                                label="Test Type ID" 
-                              />
-                            </div>
-
-                            {/* Framework Badge */}
-                            <div className="mt-3">
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {testType.testFramework}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {testTypes.length === 0 && !loading && (
-                      <div className="text-center py-8 text-gray-500">
-                        <p className="text-sm">No test types found</p>
-                      </div>
-                    )}
+                    {renderContent()}
                   </motion.div>
-                </div>
-              )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Footer */}
@@ -702,6 +969,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
     </>
   );
 };
+
 
 // Export using ES6 syntax instead of module.exports
 export { Sidebar, SettingSidebar };
