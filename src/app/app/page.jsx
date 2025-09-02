@@ -9,7 +9,7 @@ export const metadata = {
 function Page() {
   return (
     <div className="flex h-screen">
-      <Sidebar/>
+      <Sidebar />
     </div>
   );
 }

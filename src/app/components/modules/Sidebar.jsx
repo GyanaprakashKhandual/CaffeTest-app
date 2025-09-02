@@ -476,7 +476,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
         getProjectDetails(),
         getTestTypes()
       ]);
-      
+
       setProjectDetails(project);
       setTestTypes(testTypesResponse?.data || []);
     } catch (error) {
@@ -531,7 +531,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
 
   const CopyButton = ({ text, type, label }) => {
     const isCopied = copiedId === `${type}-${text}`;
-    
+
     return (
       <motion.button
         whileHover={{ scale: 1.1 }}
@@ -572,10 +572,10 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                 {projectDetails._id}
               </p>
             </div>
-            <CopyButton 
-              text={projectDetails._id} 
-              type="project" 
-              label="Project ID" 
+            <CopyButton
+              text={projectDetails._id}
+              type="project"
+              label="Project ID"
             />
           </div>
         </motion.div>
@@ -591,7 +591,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Test Types ({testTypes.length})
         </h3>
-        
+
         <div className="space-y-3">
           {testTypes.map((testType, index) => (
             <motion.div
@@ -613,7 +613,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                   <div className="flex-1">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">
@@ -623,10 +623,10 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                       {testType._id}
                     </p>
                   </div>
-                  <CopyButton 
-                    text={testType._id} 
-                    type="testType" 
-                    label="Test Type ID" 
+                  <CopyButton
+                    text={testType._id}
+                    type="testType"
+                    label="Test Type ID"
                   />
                 </div>
 
@@ -686,8 +686,8 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
               <label className="text-xs text-gray-500 uppercase tracking-wide font-medium">
                 Display Name
               </label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your name"
               />
@@ -696,8 +696,8 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
               <label className="text-xs text-gray-500 uppercase tracking-wide font-medium">
                 Email
               </label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email"
               />
@@ -742,8 +742,8 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                 Connection String
               </label>
               <div className="flex items-center space-x-2 mt-1">
-                <input 
-                  type="password" 
+                <input
+                  type="password"
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="mongodb://localhost:27017"
                 />
@@ -803,8 +803,8 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-700">Session Timeout (mins)</span>
-              <input 
-                type="number" 
+              <input
+                type="number"
                 className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
                 defaultValue="30"
               />
@@ -912,11 +912,10 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                     <motion.button
                       key={item.id}
                       onClick={() => setActiveMenu(item.id)}
-                      className={`flex-1 flex flex-col items-center py-3 px-2 text-xs font-medium transition-all duration-200 ${
-                        activeMenu === item.id
+                      className={`flex-1 flex flex-col items-center py-3 px-2 text-xs font-medium transition-all duration-200 ${activeMenu === item.id
                           ? 'text-blue-600 bg-white border-b-2 border-blue-600'
                           : 'text-gray-600 hover:text-blue-600 hover:bg-white'
-                      }`}
+                        }`}
                     >
                       <Icon className="h-4 w-4 mb-1" />
                       <span className="text-center leading-tight">{item.label}</span>

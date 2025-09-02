@@ -176,16 +176,16 @@ export default function Navbar() {
                         </motion.button>
 
                         <motion.button
-                        onClick={() => setSettingIsOpen((prev) => !prev)}
-                         whileHover={{ scale: 1.1, rotate: 90 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                            onClick={() => setSettingIsOpen((prev) => !prev)}
+                            whileHover={{ scale: 1.1, rotate: 90 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
                             <Settings className="h-5 w-5" />
                         </motion.button>
-                        <SettingSidebar isOpen={settingIsOpen} toggleSidebar={() => setSettingIsOpen((prev) => !prev)} />
                         <motion.button whileHover={{ scale: 1.1 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
                             <User className="h-5 w-5" />
                         </motion.button>
                     </div>
                 </div>
+                <SettingSidebar isOpen={settingIsOpen} toggleSidebar={() => setSettingIsOpen((prev) => !prev)} />
 
                 {/* Mobile Menu */}
                 <AnimatePresence>
