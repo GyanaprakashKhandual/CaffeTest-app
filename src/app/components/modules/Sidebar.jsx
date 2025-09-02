@@ -523,10 +523,10 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
   };
 
   const menuItems = [
-    { id: 'project', label: 'Project Details', icon: FolderOpen },
-    { id: 'app', label: 'App & Preference', icon: Cog },
-    { id: 'database', label: 'Database Settings', icon: Database },
-    { id: 'security', label: 'Security & Access', icon: Shield }
+    { id: 'project', icon: FolderOpen },
+    { id: 'app', icon: Cog },
+    { id: 'database', icon: Database },
+    { id: 'security', icon: Shield }
   ];
 
   const CopyButton = ({ text, type, label }) => {
@@ -887,7 +887,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
             exit="closed"
             variants={overlayVariants}
             onClick={toggleSidebar}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0"
           />
         )}
       </AnimatePresence>
@@ -900,20 +900,8 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
             animate="open"
             exit="closed"
             variants={sidebarVariants}
-            className="fixed top-0 right-0 h-screen w-96 bg-white shadow-2xl z-50 flex flex-col"
+            className="fixed top-0 right-0 min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] w-96 bg-[radial-gradient(circle_at_center,theme(colors.blue.50),theme(colors.sky.50),white)] z-50 flex flex-col mt-16"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-              <h2 className="text-xl font-semibold text-gray-800">Settings</h2>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleSidebar}
-                className="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </motion.button>
-            </div>
 
             {/* Menu Navigation */}
             <div className="border-b border-gray-200 bg-gray-50">
