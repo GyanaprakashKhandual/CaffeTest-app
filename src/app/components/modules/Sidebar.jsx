@@ -900,7 +900,7 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
             animate="open"
             exit="closed"
             variants={sidebarVariants}
-            className="fixed top-0 right-0 min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] w-96 bg-[radial-gradient(circle_at_center,theme(colors.blue.50),theme(colors.sky.50),white)] z-50 flex flex-col mt-16"
+            className="fixed top-0 right-0 min-h-[calc(100vh-65px)] max-h-[calc(100vh-65px)] w-96 bg-[radial-gradient(circle_at_center,theme(colors.blue.50),theme(colors.sky.50),white)] z-50 flex flex-col mt-[65px]"
           >
 
             {/* Menu Navigation */}
@@ -911,8 +911,6 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
                   return (
                     <motion.button
                       key={item.id}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveMenu(item.id)}
                       className={`flex-1 flex flex-col items-center py-3 px-2 text-xs font-medium transition-all duration-200 ${
                         activeMenu === item.id
