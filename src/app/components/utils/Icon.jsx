@@ -54,6 +54,5 @@ const CalfFolderOpen = () => {
   );
 };
 
-
-
-module.exports = { CalfFolder, CalfFolderOpen };
+// Use ES6 export syntax instead of module.exports
+export { CalfFolder, CalfFolderOpen };

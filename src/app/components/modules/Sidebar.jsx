@@ -20,8 +20,9 @@ import {
 import { ThreeDotsDropdown } from "../assets/Dropdown";
 import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
-import { CalfFolder, CalfFolderOpen } from "../utils/Icon";
+
 import { useProject } from "@/app/script/Projectcontext";
+import { CalfFolder } from "../utils/Icon";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
