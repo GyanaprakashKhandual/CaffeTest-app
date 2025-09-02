@@ -21,6 +21,7 @@ import {
 import { getProjectDetails } from '@/app/utils/functions/GetProjectDetails';
 import TestTypeList from './Window';
 import { SettingSidebar } from './Sidebar';
+import { GoogleArrowDown } from '../utils/Icon';
 
 // Styled Dropdown Component
 const StyledDropdown = ({ options, placeholder, value, onChange, size = "sm", className = "" }) => {
@@ -56,7 +57,7 @@ const StyledDropdown = ({ options, placeholder, value, onChange, size = "sm", cl
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <ChevronDown className="h-4 w-4" />
+                    <GoogleArrowDown className="h-4 w-4" />
                 </motion.div>
             </motion.button>
 
@@ -265,7 +266,7 @@ export default function Navbar() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm"
+                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
                         >
                             <MessageSquarePlus className="h-4 w-4" />
                             <span>Add Comment</span>
