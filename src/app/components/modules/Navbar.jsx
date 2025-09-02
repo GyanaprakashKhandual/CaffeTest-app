@@ -20,6 +20,7 @@ import {
 import { Dropdown } from '../assets/Dropdown';
 import { getProjectDetails } from '@/app/utils/functions/GetProjectDetails';
 import TestTypeList from './Window';
+import { SettingSidebar } from './Sidebar';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +29,7 @@ export default function Navbar() {
     const [selectedReport, setSelectedReport] = useState(null);
     const [project, setProject] = useState(null);
     const [testTypeIsOpen, setTestTypeIsOpen] = useState(false);
+    const [settingIsOpen, setSettingIsOpen] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -173,9 +175,12 @@ export default function Navbar() {
                             <span>Add Comment</span>
                         </motion.button>
 
-                        <motion.button whileHover={{ scale: 1.1, rotate: 90 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                        <motion.button
+                        onClick={() => setSettingIsOpen((prev) => !prev)}
+                         whileHover={{ scale: 1.1, rotate: 90 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
                             <Settings className="h-5 w-5" />
                         </motion.button>
+                        <SettingSidebar isOpen={settingIsOpen} toggleSidebar={() => setSettingIsOpen((prev) => !prev)} />
                         <motion.button whileHover={{ scale: 1.1 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
                             <User className="h-5 w-5" />
                         </motion.button>

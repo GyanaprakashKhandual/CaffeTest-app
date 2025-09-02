@@ -23,6 +23,8 @@ import { FaCoffee } from "react-icons/fa";
 
 import { useProject } from "@/app/script/Projectcontext";
 import { CalfFolder } from "../utils/Icon";
+import { getProjectDetails } from "@/app/utils/functions/GetProjectDetails";
+import { getTestTypes } from "@/app/utils/functions/GetTestType";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -450,8 +452,7 @@ const Sidebar = () => {
   );
 };
 
-const ProjectSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const SettingSidebar = ({ isOpen, toggleSidebar }) => {
   const [testTypes, setTestTypes] = useState([]);
   const [projectDetails, setProjectDetails] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -539,15 +540,6 @@ const ProjectSidebar = () => {
 
   return (
     <>
-      {/* Trigger Button */}
-      <motion.button
-        whileHover={{ scale: 1.1, rotate: 90 }}
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-600 hover:text-blue-600 rounded-lg transition-colors"
-      >
-        <Settings className="h-5 w-5" />
-      </motion.button>
-
       {/* Overlay */}
       <AnimatePresence>
         {isOpen && (
@@ -556,7 +548,7 @@ const ProjectSidebar = () => {
             animate="open"
             exit="closed"
             variants={overlayVariants}
-            onClick={() => setIsOpen(false)}
+            onClick={toggleSidebar}
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
           />
         )}
@@ -578,7 +570,7 @@ const ProjectSidebar = () => {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsOpen(false)}
+                onClick={toggleSidebar}
                 className="p-2 text-gray-500 hover:text-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -712,4 +704,4 @@ const ProjectSidebar = () => {
 };
 
 // Export using ES6 syntax instead of module.exports
-export { Sidebar, ProjectSidebar };
+export { Sidebar, SettingSidebar };
