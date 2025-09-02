@@ -956,5 +956,5 @@ const SettingSidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 
-// Export using ES6 syntax instead of module.exports
+
 export { Sidebar, SettingSidebar };

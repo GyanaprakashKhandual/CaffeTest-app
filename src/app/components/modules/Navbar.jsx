@@ -14,13 +14,88 @@ import {
     Table,
     LayoutGrid,
     Bug,
-    FileText
+    FileText,
+    ChevronDown
 } from 'lucide-react';
 
-import { Dropdown } from '../assets/Dropdown';
 import { getProjectDetails } from '@/app/utils/functions/GetProjectDetails';
 import TestTypeList from './Window';
 import { SettingSidebar } from './Sidebar';
+
+// Styled Dropdown Component
+const StyledDropdown = ({ options, placeholder, value, onChange, size = "sm", className = "" }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    useEffect(() => {
+        if (value) {
+            const option = options.find(opt => opt.value === value);
+            setSelectedOption(option);
+        }
+    }, [value, options]);
+
+    const handleSelect = (option) => {
+        setSelectedOption(option);
+        onChange(option.value);
+        setIsOpen(false);
+    };
+
+    return (
+        <div className={`relative ${className}`}>
+            <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white/70 backdrop-blur-sm border border-blue-200/50 rounded-lg hover:bg-blue-50/50 hover:text-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300/50"
+            >
+                <div className="flex items-center space-x-2">
+                    {selectedOption?.icon}
+                    <span>{selectedOption?.label || placeholder}</span>
+                </div>
+                <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <ChevronDown className="h-4 w-4" />
+                </motion.div>
+            </motion.button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 right-0 mt-1 bg-white/90 backdrop-blur-md border border-blue-200/50 rounded-lg shadow-lg z-50 overflow-hidden"
+                    >
+                        {options.map((option, index) => (
+                            <motion.button
+                                key={option.value}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                onClick={() => handleSelect(option)}
+                                className="flex items-center space-x-2 w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50/50 hover:text-blue-600 transition-colors duration-150 first:rounded-t-lg last:rounded-b-lg"
+                            >
+                                {option.icon}
+                                <span>{option.label}</span>
+                            </motion.button>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Backdrop to close dropdown when clicking outside */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
+        </div>
+    );
+};
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +127,25 @@ export default function Navbar() {
         { value: 'bug', label: 'BUG', icon: <Bug className="h-4 w-4" /> },
         { value: 'test-case', label: 'Test Case', icon: <FileText className="h-4 w-4" /> }
     ];
+
+    // Prevent body scroll when settings sidebar is open
+    useEffect(() => {
+        if (settingIsOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Add delay before restoring scroll to prevent flash
+            const timer = setTimeout(() => {
+                document.body.style.overflow = 'unset';
+            }, 300); // Match sidebar animation duration
+
+            return () => clearTimeout(timer);
+        }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [settingIsOpen]);
 
     return (
         <nav className="sticky top-0 z-50 bg-gradient-to-r from-blue-100 via-sky-50 to-blue-100 backdrop-blur-md border-b border-blue-200/30">
@@ -94,12 +188,14 @@ export default function Navbar() {
 
                     {/* Brand */}
                     <div className="flex-shrink-0 flex items-center gap-3">
-                        <p
+                        <motion.p
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => setTestTypeIsOpen((prev) => !prev)}
-                            className="rounded-md p-1 hover:bg-gray-100"
+                            className="rounded-md p-1 hover:bg-blue-100/50 transition-colors duration-200 cursor-pointer"
                         >
                             <Menu className="h-6 w-6 text-black" />
-                        </p>
+                        </motion.p>
                         <TestTypeList
                             sidebarOpen={testTypeIsOpen}
                             onClose={() => setTestTypeIsOpen(false)}
@@ -128,7 +224,7 @@ export default function Navbar() {
                                 placeholder="Search..."
                                 onFocus={() => setSearchFocus(true)}
                                 onBlur={() => setSearchFocus(false)}
-                                className="block w-[500px] pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-full bg-white/70 backdrop-blur-sm placeholder-gray-500 focus:outline-none"
+                                className="block w-[500px] pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-full bg-white/70 backdrop-blur-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300/50"
                             />
                         </motion.div>
                     </div>
@@ -137,7 +233,7 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center space-x-3">
 
                         {/* View Dropdown */}
-                        <Dropdown
+                        <StyledDropdown
                             options={viewOptions}
                             placeholder="View Options"
                             value={selectedView}
@@ -147,7 +243,7 @@ export default function Navbar() {
                         />
 
                         {/* Report Dropdown */}
-                        <Dropdown
+                        <StyledDropdown
                             options={reportOptions}
                             placeholder="Report Options"
                             value={selectedReport}
@@ -160,7 +256,7 @@ export default function Navbar() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg"
+                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
                         >
                             <Filter className="h-4 w-4" />
                             <span>Filter</span>
@@ -169,7 +265,7 @@ export default function Navbar() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-sm"
+                            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm"
                         >
                             <MessageSquarePlus className="h-4 w-4" />
                             <span>Add Comment</span>
@@ -177,15 +273,29 @@ export default function Navbar() {
 
                         <motion.button
                             onClick={() => setSettingIsOpen((prev) => !prev)}
-                            whileHover={{ scale: 1.1, rotate: 90 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                            whileHover={{ scale: 1.1, rotate: 180 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+                        >
                             <Settings className="h-5 w-5" />
                         </motion.button>
-                        <motion.button whileHover={{ scale: 1.1 }} className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                        <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+                        >
                             <User className="h-5 w-5" />
                         </motion.button>
                     </div>
                 </div>
-                <SettingSidebar isOpen={settingIsOpen} toggleSidebar={() => setSettingIsOpen((prev) => !prev)} />
+
+                {/* Settings Sidebar with scroll prevention */}
+                <div style={{ overflow: settingIsOpen ? 'hidden' : 'visible' }}>
+                    <SettingSidebar
+                        isOpen={settingIsOpen}
+                        toggleSidebar={() => setSettingIsOpen((prev) => !prev)}
+                    />
+                </div>
 
                 {/* Mobile Menu */}
                 <AnimatePresence>
@@ -207,12 +317,12 @@ export default function Navbar() {
                                     <input
                                         type="text"
                                         placeholder="Search..."
-                                        className="block w-full pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-lg bg-white/70 placeholder-gray-500 focus:outline-none"
+                                        className="block w-full pl-10 pr-3 py-2.5 border border-blue-200/50 rounded-lg bg-white/70 backdrop-blur-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300/50"
                                     />
                                 </div>
 
                                 {/* Mobile Dropdowns */}
-                                <Dropdown
+                                <StyledDropdown
                                     options={viewOptions}
                                     placeholder="View Options"
                                     value={selectedView}
@@ -221,7 +331,7 @@ export default function Navbar() {
                                     className="w-full"
                                 />
 
-                                <Dropdown
+                                <StyledDropdown
                                     options={reportOptions}
                                     placeholder="Report Options"
                                     value={selectedReport}
@@ -231,21 +341,38 @@ export default function Navbar() {
                                 />
 
                                 {/* Mobile Buttons */}
-                                <button className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+                                >
                                     <Filter className="h-4 w-4" />
                                     <span>Filter</span>
-                                </button>
-                                <button className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-sm"
+                                >
                                     <MessageSquarePlus className="h-4 w-4" />
                                     <span>Add Comment</span>
-                                </button>
+                                </motion.button>
                                 <div className="flex items-center justify-center space-x-4 pt-2">
-                                    <button className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                                    <motion.button
+                                        whileHover={{ scale: 1.1, rotate: 180 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => setSettingIsOpen((prev) => !prev)}
+                                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+                                    >
                                         <Settings className="h-5 w-5" />
-                                    </button>
-                                    <button className="p-2 text-gray-600 hover:text-blue-600 rounded-lg">
+                                    </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-lg transition-colors duration-200"
+                                    >
                                         <User className="h-5 w-5" />
-                                    </button>
+                                    </motion.button>
                                 </div>
                             </div>
                         </motion.div>
